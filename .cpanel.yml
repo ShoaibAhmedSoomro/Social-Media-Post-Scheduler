@@ -1,0 +1,14 @@
+---
+deployment:
+  tasks:
+    - export DEPLOYPATH=/home/asicoae/publisher.softspace.ae
+    # Install PHP dependencies
+    - /opt/cpanel/ea-php82/root/usr/bin/php /opt/cpanel/composer/bin/composer install --no-dev --optimize-autoloader --working-dir=$DEPLOYPATH
+    # Set correct permissions on storage and cache
+    - chmod -R 775 $DEPLOYPATH/storage
+    - chmod -R 775 $DEPLOYPATH/bootstrap/cache
+    # Clear and rebuild caches
+    - /opt/cpanel/ea-php82/root/usr/bin/php $DEPLOYPATH/artisan config:clear
+    - /opt/cpanel/ea-php82/root/usr/bin/php $DEPLOYPATH/artisan cache:clear
+    - /opt/cpanel/ea-php82/root/usr/bin/php $DEPLOYPATH/artisan view:clear
+    - /opt/cpanel/ea-php82/root/usr/bin/php $DEPLOYPATH/artisan route:clear
